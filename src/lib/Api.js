@@ -38,6 +38,14 @@ class Api
         return this;
     }
 
+    getTypes() {
+        return getInstance().then(d2 => d2.models);
+    }
+
+    getAny(type) {
+       return getInstance().then(d2 => d2.models[type].list());
+    }
+
     getDataElements() {
         return getInstance().then(d2 => d2.models.dataElement.list());
     }

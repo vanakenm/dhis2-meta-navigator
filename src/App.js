@@ -9,19 +9,39 @@ import NavigationBar from './NavigationBar'
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {dataElements: []};
+    this.state = { models: [] };
   }
 
   async componentDidMount() {
-    let dataElements = await Api.getDataElements();
-    this.setState({dataElements: dataElements});
-  }
-  render() {
-    console.log(this.state.dataElements);
+    let types = await Api.getTypes();
+    const models = await this.collectModels(types);
 
+    this.setState({ models: models });
+  }
+
+  async collectModels(types) {
+    const approvedModels = ['dataElement', 'organisationUnit', 'dataSet', 'organisationUnitGroup', 'dataElementGroup'];
+    let models = [];
+
+    for(let entry of Object.entries(types)) {
+      let key = entry[0];
+      let value = entry[1];
+
+      if(approvedModels.includes(key)) {
+        let values = await Api.getAny(key);
+        console.log(`${key} ${value}`);
+
+        models.push({ name: key, data: values, count: values.pager.total })
+      }
+    };
+    return models;
+  }
+
+  render() {
     let paperStyle = { width: '80%', marginLeft: '10%', marginTop: '20px', padding: "50px" }
     let items = []
-    this.state.dataElements.forEach(de => items.push(<ListItem primaryText={de.displayName} rightIcon={<ActionInfo />}/>));
+
+    this.state.models.forEach(model => items.push(<ListItem key={model.name} primaryText={`${model.name} (${model.count})`} rightIcon={<ActionInfo />}/>));
 
     return (
       <MuiThemeProvider>
@@ -29,7 +49,6 @@ class App extends Component {
             <NavigationBar />
             <Paper zDepth={1} style={paperStyle} >
                 <h2>Welcome to React</h2>
-                <h3>Data Elements</h3>
                 <List>
                   { items }
                 </List>
