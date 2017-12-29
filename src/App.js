@@ -48,7 +48,7 @@ class App extends Component {
           <div>
             <NavigationBar />
             <Paper zDepth={1} style={paperStyle} >
-                <h2>Welcome to React</h2>
+                <h2>Welcome to DHIS2 Analyzer</h2>
                 <List>
                   { items }
                 </List>

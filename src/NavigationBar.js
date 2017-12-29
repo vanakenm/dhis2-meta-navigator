@@ -19,11 +19,11 @@ class NavigationBar extends Component {
         return (
             <Toolbar style={ toolBarStyle }>
                 <a href={Api.baseUrl}>
-                    <img src={`${Api.baseUrl}/api/staticContent/logo_banner`} style={ imageStyle }
+                    <img src={`${Api.baseUrl}/api/26/staticContent/logo_banner`} style={ imageStyle }
                          alt="dhis2"
                     />
                 </a>
-                <ToolbarTitle text="BLSQ Test React DHIS2 App"/>
+                <ToolbarTitle text="DHIS2 Analyzer App"/>
             </Toolbar>
         );
     }
