@@ -12,7 +12,7 @@
     "react-scripts": "1.0.11"
   },
   "homepage": ".",
-  "description": "Example DHIS2 application using D2 and React",
+  "description": "DHIS2 application giving insight on your instance usage",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -20,7 +20,7 @@
     "eject": "react-scripts eject"
   },
   "manifest.webapp": {
-    "name": "BLSQ D2/React Example App for DHIS2",
+    "name": "DHIS2 Analyzer",
     "icons": {
       "48": "icon.png"
     },
