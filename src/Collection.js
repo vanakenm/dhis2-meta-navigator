@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Api from './lib/Api';
+import CircularProgress from 'material-ui/CircularProgress';
+
 import {
   Table,
   TableBody,
@@ -11,12 +14,17 @@ import {
 class Collection extends Component {
     constructor(props) {
     super(props);
-    console.log(props);
 
     let modelName = props.location.pathname.split("/").pop();
     console.log(modelName);
-    let collection = props.items.find((model) => model.name === modelName);
-    this.state = { modelName: modelName, collection: collection ? collection.data : [] };
+
+
+    this.state = { modelName: modelName, collection: [] };
+  }
+
+  async componentDidMount() {
+    let collection = await Api.getAny(this.state.modelName);
+    this.setState({collection: collection});
   }
 
   render() {
@@ -32,18 +40,30 @@ class Collection extends Component {
 
     return (
       <div>
-      <h3>{this.state.modelName}</h3>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHeaderColumn>id</TableHeaderColumn>
-            <TableHeaderColumn>name</TableHeaderColumn>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {items}
-        </TableBody>
-      </Table>
+      { 
+        (items.length === 0)
+        ? 
+        <div>
+          <h3>{this.state.modelName} (loading)</h3>
+          <CircularProgress size={80} thickness={5} />
+        </div>
+        : 
+        <div>
+          <h3>{this.state.modelName} ({items.length})</h3>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHeaderColumn>id</TableHeaderColumn>
+                <TableHeaderColumn>name</TableHeaderColumn>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items}
+            </TableBody>
+          </Table>
+        </div>
+      } 
+      
       </div>
     );
   }

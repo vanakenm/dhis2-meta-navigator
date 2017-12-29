@@ -6,8 +6,6 @@ import CircularProgress from 'material-ui/CircularProgress';
 class Home extends Component {
   constructor(props) {
     super(props);
-    console.log('props');
-    console.log(props);
   }
 
   render() {
@@ -24,7 +22,7 @@ class Home extends Component {
       <div>
       <h2>Welcome to DHIS2 Analyzer</h2>
       { 
-        (items.length == 0)
+        (items.length === 0)
         ? <CircularProgress size={80} thickness={5} />
         : <List>{ items }</List>
       }    

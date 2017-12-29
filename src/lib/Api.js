@@ -46,10 +46,6 @@ class Api
        return getInstance().then(d2 => d2.models[type].list());
     }
 
-    getDataElements() {
-        return getInstance().then(d2 => d2.models.dataElement.list());
-    }
-
     /**
      * Make sure the response status code is 2xx
      * @param response

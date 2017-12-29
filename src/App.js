@@ -44,7 +44,7 @@ class App extends Component {
             <NavigationBar />
             <Paper zDepth={1} style={paperStyle} >
               <Route exact path={'/'} render={() => <Home items={this.state.models} />} />
-              <Route path={'/collection/'} render={(props) => <Collection {...props} items={this.state.models} />}/>
+              <Route path={'/collection/'} component={Collection} />
             </Paper>
           </div>
       </MuiThemeProvider>
