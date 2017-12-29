@@ -8,9 +8,9 @@
     }
   },
   "appType": "APP",
-  "name": "BLSQ D2/React Example App for DHIS2",
+  "name": "DHIS2 Analyzer",
   "version": "0.1.0",
-  "description": "Example DHIS2 application using D2 and React",
+  "description": "DHIS2 Analyzer",
   "icons": {
     "48": "icon.png"
   },

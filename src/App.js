@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import {List, ListItem} from 'material-ui/List';
 import Paper from 'material-ui/Paper';
-import ActionInfo from 'material-ui/svg-icons/action/info';
 import Api from './lib/Api';
+import Home from './Home';
 import NavigationBar from './NavigationBar'
+import Collection from './Collection'
+import { Route } from 'react-router-dom'
 
 class App extends Component {
   constructor(props) {
@@ -14,44 +15,36 @@ class App extends Component {
 
   async componentDidMount() {
     let types = await Api.getTypes();
-    const models = await this.collectModels(types);
-
-    this.setState({ models: models });
+    this.collectModels(types);
   }
 
   async collectModels(types) {
-    const approvedModels = ['dataElement', 'organisationUnit', 'dataSet', 'organisationUnitGroup', 'dataElementGroup'];
-    let models = [];
+    const rejectedModels = ['externalFileResource', 'api', 'validationCriteria', 'mapView', 'chart', 'reportTable'];
+    let sortedKeys = Object.keys(types).sort();
 
-    for(let entry of Object.entries(types)) {
-      let key = entry[0];
-      let value = entry[1];
-
-      if(approvedModels.includes(key)) {
+    for(let key of sortedKeys) {
+      if(!key.endsWith('s') && !rejectedModels.includes(key) && key.startsWith('organisation')) {
+        console.log(key);
         let values = await Api.getAny(key);
-        console.log(`${key} ${value}`);
+        console.log(`${key} ${values}`);
 
+        let models = this.state.models;
         models.push({ name: key, data: values, count: values.pager.total })
+        this.setState({ models: models });
       }
     };
-    return models;
   }
 
   render() {
     let paperStyle = { width: '80%', marginLeft: '10%', marginTop: '20px', padding: "50px" }
-    let items = []
-
-    this.state.models.forEach(model => items.push(<ListItem key={model.name} primaryText={`${model.name} (${model.count})`} rightIcon={<ActionInfo />}/>));
 
     return (
       <MuiThemeProvider>
           <div>
             <NavigationBar />
             <Paper zDepth={1} style={paperStyle} >
-                <h2>Welcome to DHIS2 Analyzer</h2>
-                <List>
-                  { items }
-                </List>
+              <Route exact path={'/'} render={() => <Home items={this.state.models} />} />
+              <Route path={'/collection/'} render={(props) => <Collection {...props} items={this.state.models} />}/>
             </Paper>
           </div>
       </MuiThemeProvider>

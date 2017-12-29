@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import {Toolbar, ToolbarTitle} from 'material-ui/Toolbar';
+import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
 import Theme from './utils/theme';
 import Api from './lib/Api';
+import { Link } from 'react-router-dom';
 
 const imageStyle = {
     height: '20px',
