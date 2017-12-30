@@ -1,22 +1,19 @@
 import React, { Component } from "react";
-import { Toolbar, ToolbarTitle } from "material-ui/Toolbar";
-import Theme from "./utils/theme";
+import Toolbar from 'material-ui/Toolbar';
+import AppBar from 'material-ui/AppBar';
+import Typography from 'material-ui/Typography';
 import Api from "./lib/Api";
 
 const imageStyle = {
     height: "20px"
 };
 
-const toolBarStyle = {
-    alignItems: "center",
-    backgroundColor: Theme.palette.primary1Color,
-    color: Theme.palette.alternateTextColor
-};
 
 class NavigationBar extends Component {
     render() {
         return (
-            <Toolbar style={toolBarStyle}>
+          <AppBar position="static">
+            <Toolbar>
                 <a href={Api.baseUrl}>
                     <img
                         src={`${Api.baseUrl}/api/26/staticContent/logo_banner`}
@@ -24,8 +21,11 @@ class NavigationBar extends Component {
                         alt="dhis2"
                     />
                 </a>
-                <ToolbarTitle text="DHIS2 Analyzer App" />
+                <Typography type="DHIS2 Analyzer App" color="inherit" className={{flex: 1}}>
+                    DHIS2 Analyzer App
+                </Typography>
             </Toolbar>
+          </AppBar>
         );
     }
 }

@@ -1,16 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Api from "./lib/Api";
-import CircularProgress from "material-ui/CircularProgress";
-
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn
-} from "material-ui/Table";
+import { CircularProgress } from 'material-ui/Progress';
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 
 class Collection extends Component {
   constructor(props) {
@@ -35,12 +27,12 @@ class Collection extends Component {
     this.state.collection.forEach(item =>
       items.push(
         <TableRow key={item.id}>
-          <TableRowColumn>{item.id}</TableRowColumn>
-          <TableRowColumn>
+          <TableCell>{item.id}</TableCell>
+          <TableCell>
             <Link to={`/collection/${this.state.modelName}/${item.id}`}>
               {item.displayName}
             </Link>
-          </TableRowColumn>
+          </TableCell>
         </TableRow>
       )
     );
@@ -58,13 +50,13 @@ class Collection extends Component {
               {this.state.modelName} ({items.length})
             </h3>
             <Table>
-              <TableHeader displaySelectAll={false}>
+              <TableHead>
                 <TableRow>
-                  <TableHeaderColumn>id</TableHeaderColumn>
-                  <TableHeaderColumn>name</TableHeaderColumn>
+                  <TableCell>id</TableCell>
+                  <TableCell>name</TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody displayRowCheckbox={false}>{items}</TableBody>
+              </TableHead>
+              <TableBody>{items}</TableBody>
             </Table>
           </div>
         )}

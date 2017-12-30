@@ -1,16 +1,8 @@
 import React, { Component } from "react";
 import Api from "./lib/Api";
-import CircularProgress from "material-ui/CircularProgress";
-
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn
-} from "material-ui/Table";
-
+import { CircularProgress } from 'material-ui/Progress';
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+6
 class Item extends Component {
   constructor(props) {
     super(props);
@@ -53,8 +45,8 @@ class Item extends Component {
       let value = this.state.meta[key];
       items.push(
         <TableRow key={key}>
-          <TableRowColumn>{key}</TableRowColumn>
-          <TableRowColumn>{this.renderValue(value)}</TableRowColumn>
+          <TableCell>{key}</TableCell>
+          <TableCell>{this.renderValue(value)}</TableCell>
         </TableRow>
       );
     });
@@ -74,12 +66,12 @@ class Item extends Component {
               {this.state.modelName} {this.state.id}
             </h3>
             <Table>
-              <TableHeader displaySelectAll={false}>
+              <TableHead displaySelectAll={false}>
                 <TableRow>
-                  <TableHeaderColumn>Name</TableHeaderColumn>
-                  <TableHeaderColumn>Value</TableHeaderColumn>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Value</TableCell>
                 </TableRow>
-              </TableHeader>
+              </TableHead>
               <TableBody displayRowCheckbox={false}>{items}</TableBody>
             </Table>
           </div>

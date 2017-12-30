@@ -7,6 +7,7 @@ import NavigationBar from "./NavigationBar";
 import Collection from "./Collection";
 import Item from "./Item";
 import { Route } from "react-router-dom";
+import theme from "./utils/theme";
 
 class App extends Component {
   constructor(props) {
@@ -56,10 +57,9 @@ class App extends Component {
     };
 
     return (
-      <MuiThemeProvider>
+      <MuiThemeProvider theme={theme}>
         <div>
           <NavigationBar />
-          <Paper zDepth={1} style={paperStyle}>
             <Route
               exact
               path={"/"}
@@ -71,7 +71,6 @@ class App extends Component {
               path={"/collection/:modelname"}
               component={Collection}
             />
-          </Paper>
         </div>
       </MuiThemeProvider>
     );

@@ -5,7 +5,10 @@
   "dependencies": {
     "d2": "^27.0.0",
     "d2-utilizr": "^0.2.13",
-    "material-ui": "^0.19.0",
+    "global": "^4.3.2",
+    "jscodeshift": "^0.4.0",
+    "material-ui": "next",
+    "material-ui-codemod": "^1.0.0-beta.23",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-router": "^4.2.0",
