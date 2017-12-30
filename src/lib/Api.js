@@ -1,10 +1,8 @@
-import { init, getInstance, getManifest } from 'd2/lib/d2';
+import { init, getInstance, getManifest } from "d2/lib/d2";
 
-const API_URL = 'https://play.dhis2.org/demo';
+const API_URL = "https://play.dhis2.org/demo";
 
-class Api
-{
-
+class Api {
     /**
      * @param url API endpoint url
      * @param auth Authentication HTTP header content
@@ -14,7 +12,7 @@ class Api
         this.cache = [];
         this.userId = "";
         this.baseUrl = "..";
-        this.ignoredStores = [''];
+        this.ignoredStores = [""];
     }
 
     /**
@@ -22,23 +20,34 @@ class Api
      * @returns {Api}
      */
     initialize() {
-        let headers = process.env.NODE_ENV === 'development' ? { Authorization: 'Basic YWRtaW46ZGlzdHJpY3Q=' } : null;
-        this.d2 = getManifest('./manifest.webapp')
+        let headers =
+            process.env.NODE_ENV === "development"
+                ? { Authorization: "Basic YWRtaW46ZGlzdHJpY3Q=" }
+                : null;
+        this.d2 = getManifest("./manifest.webapp")
             .then(manifest => {
-                const baseUrl = process.env.NODE_ENV === 'production' ? manifest.getBaseUrl() : this.url;
+                const baseUrl =
+                    process.env.NODE_ENV === "production"
+                        ? manifest.getBaseUrl()
+                        : this.url;
                 console.info("Using URL: " + baseUrl);
                 console.info(`Loading: ${manifest.name} v${manifest.version}`);
                 console.info(`Built ${manifest.manifest_generated_at}`);
                 this.baseUrl = baseUrl;
                 return baseUrl + "/api";
-            }).catch(e => {
+            })
+            .catch(e => {
                 return this.url;
-            }).then(baseUrl  => init({baseUrl, headers}).then(d2 =>
-                this.userId = d2.currentUser.username));
+            })
+            .then(baseUrl =>
+                init({ baseUrl, headers }).then(
+                    d2 => (this.userId = d2.currentUser.username)
+                )
+            );
         return this;
     }
 
-    getTypes() {
+    getMetas() {
         return getInstance().then(d2 => d2.models);
     }
 
@@ -47,7 +56,7 @@ class Api
     }
 
     getAny(type) {
-       return getInstance().then(d2 => d2.models[type].list());
+        return getInstance().then(d2 => d2.models[type].list());
     }
 
     /**
@@ -62,5 +71,4 @@ class Api
     }
 }
 
-export default (() =>
-    new Api(API_URL).initialize())();
+export default (() => new Api(API_URL).initialize())();
