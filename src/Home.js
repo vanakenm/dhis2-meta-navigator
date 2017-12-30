@@ -4,10 +4,6 @@ import {Link} from 'react-router-dom';
 import CircularProgress from 'material-ui/CircularProgress';
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     let items = [];
     this.props.items.forEach(model => items.push(

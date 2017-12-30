@@ -42,6 +42,10 @@ class Api
         return getInstance().then(d2 => d2.models);
     }
 
+    getMeta(type, id) {
+        return getInstance().then(d2 => d2.models[type].get(id));
+    }
+
     getAny(type) {
        return getInstance().then(d2 => d2.models[type].list());
     }

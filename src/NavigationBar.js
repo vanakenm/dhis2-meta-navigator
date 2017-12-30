@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Toolbar, ToolbarTitle } from 'material-ui/Toolbar';
 import Theme from './utils/theme';
 import Api from './lib/Api';
-import { Link } from 'react-router-dom';
 
 const imageStyle = {
     height: '20px',
@@ -15,7 +14,6 @@ const toolBarStyle = {
 };
 
 class NavigationBar extends Component {
-
     render() {
         return (
             <Toolbar style={ toolBarStyle }>

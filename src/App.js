@@ -3,9 +3,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Paper from 'material-ui/Paper';
 import Api from './lib/Api';
 import Home from './Home';
-import NavigationBar from './NavigationBar'
-import Collection from './Collection'
-import { Route } from 'react-router-dom'
+import NavigationBar from './NavigationBar';
+import Collection from './Collection';
+import Item from './Item';
+import { Route } from 'react-router-dom';
 
 class App extends Component {
   constructor(props) {
@@ -44,7 +45,8 @@ class App extends Component {
             <NavigationBar />
             <Paper zDepth={1} style={paperStyle} >
               <Route exact path={'/'} render={() => <Home items={this.state.models} />} />
-              <Route path={'/collection/'} component={Collection} />
+              <Route path={'/collection/:modelname/:id'} component={Item} />
+              <Route exact path={'/collection/:modelname'} component={Collection} />
             </Paper>
           </div>
       </MuiThemeProvider>
