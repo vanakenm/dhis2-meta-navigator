@@ -1,26 +1,30 @@
 import React, { Component } from "react";
-import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-import { Link } from "react-router-dom";
+import List, { ListItem } from "material-ui/List";
+import { withRouter } from "react-router-dom";
 
 class SideBar extends Component {
+  handleClick(modelname) {
+    this.props.history.push('/collection/' + modelname);
+  }
+
   render() {
     let items = [];
     this.props.items.forEach(model =>
       items.push(
-        <Link key={model.name} to={`/collection/${model.name}`}>
-          <ListItem rightIcon={<span>{model.count}</span>}>
-            {model.name}
-          </ListItem>
-        </Link>
+        <ListItem
+          button
+          key={model.name}
+          onClick={() => this.handleClick(model.name)}
+        >
+          {model.name}
+        </ListItem>
       )
     );
 
     return (
-      <List>
-        {items}
-      </List>
+        <List>{items}</List>
     );
   }
 }
 
-export default SideBar;
+export default withRouter(SideBar);

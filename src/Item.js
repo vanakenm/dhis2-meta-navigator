@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import Api from "./lib/Api";
+import Value from "./Value";
 import { CircularProgress } from 'material-ui/Progress';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-6
+
 class Item extends Component {
   constructor(props) {
     super(props);
@@ -18,27 +19,8 @@ class Item extends Component {
     this.setState({ meta: meta });
   }
 
-  renderValue(value) {
-    if (value == null) {
-      return " - ";
-    }
-
-    if (
-      typeof value === "string" ||
-      typeof value === "number" ||
-      typeof value === "boolean"
-    ) {
-      return value.toString();
-    } else {
-      return "";
-    }
-  }
-
   render() {
-    console.log(this.state);
-
     let sortedKeys = Object.keys(this.state.meta).sort();
-
     let items = [];
 
     sortedKeys.forEach(key => {
@@ -46,7 +28,7 @@ class Item extends Component {
       items.push(
         <TableRow key={key}>
           <TableCell>{key}</TableCell>
-          <TableCell>{this.renderValue(value)}</TableCell>
+          <TableCell><Value value={value} /></TableCell>
         </TableRow>
       );
     });
@@ -66,13 +48,13 @@ class Item extends Component {
               {this.state.modelName} {this.state.id}
             </h3>
             <Table>
-              <TableHead displaySelectAll={false}>
+              <TableHead>
                 <TableRow>
                   <TableCell>Name</TableCell>
                   <TableCell>Value</TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody displayRowCheckbox={false}>{items}</TableBody>
+              <TableBody>{items}</TableBody>
             </Table>
           </div>
         )}

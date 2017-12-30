@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import { Route } from "react-router-dom";
 import Grid from "material-ui/Grid";
 import Api from "./lib/Api";
 import Home from "./Home";
@@ -7,7 +7,6 @@ import NavigationBar from "./NavigationBar";
 import SideBar from "./SideBar";
 import Collection from "./Collection";
 import Item from "./Item";
-import { Route } from "react-router-dom";
 
 class App extends Component {
   constructor(props) {
@@ -50,7 +49,6 @@ class App extends Component {
 
   render() {
     return (
-      <MuiThemeProvider>
         <div>
           <NavigationBar />
           <Grid container spacing={24}>
@@ -72,7 +70,6 @@ class App extends Component {
             </Grid>
           </Grid>
         </div>
-      </MuiThemeProvider>
     );
   }
 }

@@ -1,38 +1,35 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 import Api from "./lib/Api";
 import { CircularProgress } from 'material-ui/Progress';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import { withRouter } from "react-router-dom";
 
 class Collection extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
-
     let modelName = props.match.params.modelname;
-    console.log(modelName);
-
     this.state = { modelName: modelName, collection: [] };
   }
 
-  async componentDidMount() {
-    let modelName = this.props.match.params.modelname;
+  async componentWillReceiveProps(nextProps) {
+    let modelName = nextProps.match.params.modelname;
     let collection = await Api.getAny(modelName);
     this.setState({ modelName: modelName, collection: collection });
   }
 
-  render() {
-    console.log(this.state);
+  handleClick(id) {
+    const modelname = this.state.modelName;
+    this.props.history.push('/collection/' + modelname + '/' + id);
+  }
 
+  render() {
     let items = [];
     this.state.collection.forEach(item =>
       items.push(
-        <TableRow key={item.id}>
+        <TableRow key={item.id} hover onClick={() => this.handleClick(item.id)}>
           <TableCell>{item.id}</TableCell>
           <TableCell>
-            <Link to={`/collection/${this.state.modelName}/${item.id}`}>
               {item.displayName}
-            </Link>
           </TableCell>
         </TableRow>
       )
@@ -66,4 +63,4 @@ class Collection extends Component {
   }
 }
 
-export default Collection;
+export default withRouter(Collection);

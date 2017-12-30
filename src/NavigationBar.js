@@ -20,7 +20,7 @@ class NavigationBar extends Component {
                         alt="dhis2"
                     />
                 </a>
-                <Typography type="DHIS2 Analyzer App" color="inherit" className={{flex: 1}}>
+                <Typography title="DHIS2 Analyzer App" color="inherit" className={"flex: 1"}>
                     DHIS2 Analyzer App
                 </Typography>
             </Toolbar>
