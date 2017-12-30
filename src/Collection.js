@@ -16,8 +16,9 @@ class Collection extends Component {
   }
 
   async componentDidMount() {
-    let collection = await Api.getAny(this.state.modelName);
-    this.setState({ collection: collection });
+    let modelName = this.props.match.params.modelname;
+    let collection = await Api.getAny(modelName);
+    this.setState({ modelName: modelName, collection: collection });
   }
 
   render() {

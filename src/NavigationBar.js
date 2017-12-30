@@ -8,7 +8,6 @@ const imageStyle = {
     height: "20px"
 };
 
-
 class NavigationBar extends Component {
     render() {
         return (

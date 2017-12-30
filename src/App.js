@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import Paper from "material-ui/Paper";
+import Grid from "material-ui/Grid";
 import Api from "./lib/Api";
 import Home from "./Home";
 import NavigationBar from "./NavigationBar";
+import SideBar from "./SideBar";
 import Collection from "./Collection";
 import Item from "./Item";
 import { Route } from "react-router-dom";
-import theme from "./utils/theme";
 
 class App extends Component {
   constructor(props) {
@@ -49,28 +49,28 @@ class App extends Component {
   }
 
   render() {
-    let paperStyle = {
-      width: "80%",
-      marginLeft: "10%",
-      marginTop: "20px",
-      padding: "50px"
-    };
-
     return (
-      <MuiThemeProvider theme={theme}>
+      <MuiThemeProvider>
         <div>
           <NavigationBar />
-            <Route
-              exact
-              path={"/"}
-              render={() => <Home items={this.state.models} />}
-            />
-            <Route path={"/collection/:modelname/:id"} component={Item} />
-            <Route
-              exact
-              path={"/collection/:modelname"}
-              component={Collection}
-            />
+          <Grid container spacing={24}>
+            <Grid item xs={3}>
+              <SideBar items={this.state.models} />
+            </Grid>
+            <Grid item xs={9}>
+                <Route
+                  exact
+                  path={"/"}
+                  render={() => <Home items={this.state.models} />}
+                />
+                <Route path={"/collection/:modelname/:id"} component={Item} />
+                <Route
+                  exact
+                  path={"/collection/:modelname"}
+                  component={Collection}
+                />
+            </Grid>
+          </Grid>
         </div>
       </MuiThemeProvider>
     );
