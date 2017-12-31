@@ -37,11 +37,8 @@ class App extends Component {
         key.startsWith("organisation")
       ) {
         console.log(key);
-        let values = await Api.getAny(key);
-        console.log(`${key} ${values}`);
-
         let models = this.state.models;
-        models.push({ name: key, data: values, count: values.pager.total });
+        models.push({ name: key });
         this.setState({ models: models });
       }
     }
@@ -49,13 +46,13 @@ class App extends Component {
 
   render() {
     return (
-        <div>
+        <div style={{ height: '100%' }}>
           <NavigationBar />
-          <Grid container spacing={24}>
+          <Grid container spacing={24} style={{ height: '100%' }}>
             <Grid item xs={3}>
               <SideBar items={this.state.models} />
             </Grid>
-            <Grid item xs={9}>
+            <Grid item xs={9} style={{ height: '100%' }}>
                 <Route
                   exact
                   path={"/"}

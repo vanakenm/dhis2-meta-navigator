@@ -9,7 +9,7 @@ class Home extends Component {
     this.props.items.forEach(model =>
       items.push(
         <Link key={model.name} to={`/collection/${model.name}`}>
-          <ListItem rightIcon={<span>{model.count}</span>}>
+          <ListItem>
             {model.name}
           </ListItem>
         </Link>
