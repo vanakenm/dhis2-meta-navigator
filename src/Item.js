@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Api from "./lib/Api";
 import Value from "./Value";
+import { humanize } from "./lib/Utils";
 import { CircularProgress } from 'material-ui/Progress';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 
@@ -11,7 +12,7 @@ class Item extends Component {
     let modelName = props.match.params.modelname;
     let id = props.match.params.id;
 
-    this.state = { modelName: modelName, id: id, meta: {} };
+    this.state = { modelName: modelName, label: humanize(modelName), id: id, meta: {} };
   }
 
   async componentDidMount() {
@@ -38,14 +39,14 @@ class Item extends Component {
         {items.length === 0 ? (
           <div>
             <h3>
-              {this.state.modelName} {this.state.id}
+              {this.state.label} {this.state.id}
             </h3>
             <CircularProgress size={80} thickness={5} />
           </div>
         ) : (
           <div>
             <h3>
-              {this.state.modelName} {this.state.id}
+              {this.state.label} {this.state.id}
             </h3>
             <Table>
               <TableHead>

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Toolbar from 'material-ui/Toolbar';
 import AppBar from 'material-ui/AppBar';
 import Typography from 'material-ui/Typography';
@@ -21,13 +22,13 @@ class NavigationBar extends Component {
           <AppBar position="static">
             <Toolbar>
                 <IconButton color="contrast" aria-label="Menu">
-                <a href={Api.baseUrl}>
+                <Link to={'/'}>
                     <img
                         src={`${Api.baseUrl}/api/26/staticContent/logo_banner`}
                         style={imageStyle}
                         alt="dhis2"
                     />
-                </a>
+                </Link>
                 </IconButton>
                 <Typography title="DHIS2 Analyzer App" color="inherit" style={{margin: 'auto'}}>
                     DHIS2 Analyzer App

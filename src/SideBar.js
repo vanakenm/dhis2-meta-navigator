@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import List, { ListItem } from "material-ui/List";
-import Paper from 'material-ui/Paper'
 import { withRouter } from "react-router-dom";
 
 class SideBar extends Component {
@@ -17,15 +16,13 @@ class SideBar extends Component {
           key={model.name}
           onClick={() => this.handleClick(model.name)}
         >
-          {model.name}
+          {model.label}
         </ListItem>
       )
     );
 
     return (
-      <Paper className={'shadow1'} style={{ height: "100%" }}>
         <List>{items}</List>
-      </Paper>
     );
   }
 }

@@ -10,7 +10,7 @@ class Home extends Component {
       items.push(
         <Link key={model.name} to={`/collection/${model.name}`}>
           <ListItem>
-            {model.name}
+            {model.label}
           </ListItem>
         </Link>
       )

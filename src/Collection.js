@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Api from "./lib/Api";
+import { humanize } from "./lib/Utils";
 import { CircularProgress } from 'material-ui/Progress';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import { withRouter } from "react-router-dom";
@@ -8,7 +9,7 @@ class Collection extends Component {
   constructor(props) {
     super(props);
     let modelName = props.match.params.modelname;
-    this.state = { modelName: modelName, collection: [] };
+    this.state = { modelName: modelName, label: humanize(modelName), collection: [] };
   }
 
   async componentWillMount() {
@@ -45,13 +46,13 @@ class Collection extends Component {
       <div>
         {items.length === 0 ? (
           <div>
-            <h3>{this.state.modelName} (loading)</h3>
+            <h3>{this.state.label} (loading)</h3>
             <CircularProgress size={80} thickness={5} />
           </div>
         ) : (
           <div>
             <h3>
-              {this.state.modelName} ({items.length})
+              {this.state.label} ({items.length})
             </h3>
             <Table>
               <TableHead>

@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import Grid from "material-ui/Grid";
+import Paper from 'material-ui/Paper'
 import Api from "./lib/Api";
 import Home from "./Home";
 import NavigationBar from "./NavigationBar";
 import SideBar from "./SideBar";
 import Collection from "./Collection";
 import Item from "./Item";
+import { humanize } from "./lib/Utils";
 
 class App extends Component {
   constructor(props) {
@@ -38,7 +40,7 @@ class App extends Component {
       ) {
         console.log(key);
         let models = this.state.models;
-        models.push({ name: key });
+        models.push({ name: key, label: humanize(key) });
         this.setState({ models: models });
       }
     }
@@ -53,6 +55,7 @@ class App extends Component {
               <SideBar items={this.state.models} />
             </Grid>
             <Grid item xs={9} style={{ height: '100%' }}>
+              <Paper style={{ padding: '20px', margin: '20px' }}>
                 <Route
                   exact
                   path={"/"}
@@ -64,6 +67,7 @@ class App extends Component {
                   path={"/collection/:modelname"}
                   component={Collection}
                 />
+              </Paper>
             </Grid>
           </Grid>
         </div>
