@@ -11,6 +11,10 @@ class Value extends Component {
     return property.relativeApiEndpoint.slice(1,-1);
   }
 
+  renderBoolean(boolvalue) {
+    return boolvalue ? <DoneIcon /> : <ClearIcon />;
+  } 
+
   render() {
     const value = this.props.value;
     const property = this.props.property;
@@ -19,11 +23,15 @@ class Value extends Component {
       return <BlockIcon />;
     }
 
+    if (Array.isArray(value) && value.length === 0) {
+      return "(empty)";
+    }
+
     if (this.props.name === 'id' || (property.simple === true && property.propertyType !== 'ĈOLLECTION')) {
       if (property.propertyType === 'DATE') {
         return `${value} (${timeAgo(new Date(value))})`;
       } else if (typeof value === "boolean") {
-        return value ? <DoneIcon /> : <ClearIcon />;
+        return this.renderBoolean(value);
       }
       else {
         return value.toString();
@@ -31,6 +39,9 @@ class Value extends Component {
     } 
 
     if(property.propertyType === 'REFERENCE') {
+      console.log(this.props.name);
+      console.log(property);
+      console.log(value);
       const model = this.model(property);
       return <span><Link to={`/collection/${model}/${value.id}`}>({value.id})</Link> ({model})</span>;
     } 
@@ -44,12 +55,24 @@ class Value extends Component {
 
       return <div>{values} ({model})</div>;
     }
-    else {
-      console.log("Not shown yet");
-      console.log(value);
-      console.log(property);
-     return "";
+
+    if(this.props.name === 'access') {
+      let access = [];
+      Object.entries(value).forEach(([key, value]) => {
+        access.push(<span key={key}>{key} {this.renderBoolean(value)}</span>);
+      });
+      return <span>{access}</span>;
     }
+
+    if(this.props.name === 'translations') {
+      let translations = value.map((t) => { return `'${t.value} (${t.locale})'` });
+      return <span>{translations.join(" ")}</span>      
+    }
+      
+    console.log("Not shown yet for " + this.props.name);
+    console.log(value);
+    console.log(property);
+    return "";
   }
 }
 
