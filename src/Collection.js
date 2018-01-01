@@ -15,13 +15,13 @@ class Collection extends Component {
   async componentWillMount() {
     let modelName = this.props.match.params.modelname;
     let collection = await Api.getAny(modelName);
-    this.setState({ modelName: modelName, collection: collection });
+    this.setState({ modelName: modelName, label: humanize(modelName), collection: collection });
   }
 
   async componentWillReceiveProps(nextProps) {
     let modelName = nextProps.match.params.modelname;
     let collection = await Api.getAny(modelName);
-    this.setState({ modelName: modelName, collection: collection });
+    this.setState({ modelName: modelName, label: humanize(modelName), collection: collection });
   }
 
   handleClick(id) {

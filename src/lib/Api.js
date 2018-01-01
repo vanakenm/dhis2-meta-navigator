@@ -47,6 +47,10 @@ class Api {
         return this;
     }
 
+    getSchema(model) {
+        return getInstance().then(d2 => d2.Api.getApi().get(`schemas/${model}`));
+    }
+
     getMetas() {
         return getInstance().then(d2 => d2.models);
     }

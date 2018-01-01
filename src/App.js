@@ -22,23 +22,13 @@ class App extends Component {
   }
 
   async collectModels(types) {
-    const rejectedModels = [
-      "externalFileResource",
-      "api",
-      "validationCriteria",
-      "mapView",
-      "chart",
-      "reportTable"
-    ];
     let sortedKeys = Object.keys(types).sort();
 
     for (let key of sortedKeys) {
       if (
         !key.endsWith("s") &&
-        !rejectedModels.includes(key) &&
-        key.startsWith("organisation")
+        (key.startsWith("organisation") || key.startsWith("program") || key.startsWith("dataElement")) 
       ) {
-        console.log(key);
         let models = this.state.models;
         models.push({ name: key, label: humanize(key) });
         this.setState({ models: models });
