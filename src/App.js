@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Route } from "react-router-dom";
 import Grid from "material-ui/Grid";
-import Paper from 'material-ui/Paper'
 import Api from "./lib/Api";
 import Home from "./Home";
 import NavigationBar from "./NavigationBar";
@@ -45,7 +44,7 @@ class App extends Component {
               <SideBar items={this.state.models} />
             </Grid>
             <Grid item xs={9} style={{ height: '100%' }}>
-              <Paper style={{ padding: '20px', margin: '20px' }}>
+
                 <Route
                   exact
                   path={"/"}
@@ -57,7 +56,6 @@ class App extends Component {
                   path={"/collection/:modelname"}
                   component={Collection}
                 />
-              </Paper>
             </Grid>
           </Grid>
         </div>

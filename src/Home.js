@@ -1,29 +1,16 @@
 import React, { Component } from "react";
-import List, { ListItem } from 'material-ui/List';
+import Paper from "material-ui/Paper";
 import { Link } from "react-router-dom";
-import { CircularProgress } from 'material-ui/Progress';
+import PageTitle from "./components/PageTitle";
 
 class Home extends Component {
   render() {
-    let items = [];
-    this.props.items.forEach(model =>
-      items.push(
-        <Link key={model.name} to={`/collection/${model.name}`}>
-          <ListItem>
-            {model.label}
-          </ListItem>
-        </Link>
-      )
-    );
-
     return (
       <div>
-        <h2>Welcome to DHIS2 Analyzer</h2>
-        {items.length === 0 ? (
-          <CircularProgress size={80} thickness={5} />
-        ) : (
-          <List>{items}</List>
-        )}
+        <PageTitle>Welcome to DHIS2 Analyzer</PageTitle>
+        <Paper style={{ padding: "20px", margin: "20px" }}>
+          <p>Use the sidebar to start navigating.</p>
+        </Paper>
       </div>
     );
   }
