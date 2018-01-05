@@ -3,6 +3,7 @@ import Api from "./lib/Api";
 import PageTitle from "./components/PageTitle";
 import { humanize } from "./lib/Utils";
 import { CircularProgress } from "material-ui/Progress";
+import Button from "material-ui/Button";
 import Table, {
   TableBody,
   TableCell,
@@ -46,7 +47,24 @@ class Collection extends Component {
     this.props.history.push("/collection/" + modelname + "/" + id);
   }
 
+  nextPage() {
+    this.state.collection.pager
+      .getNextPage()
+      .then(organisationUnitCollection => {
+        this.setState({ collection: organisationUnitCollection });
+      });
+  }
+
+  previousPage() {
+    this.state.collection.pager
+      .getPreviousPage()
+      .then(organisationUnitCollection => {
+        this.setState({ collection: organisationUnitCollection });
+      });
+  }
+
   render() {
+    console.log(this.state.collection);
     let items = [];
     this.state.collection.forEach(item =>
       items.push(
@@ -69,9 +87,21 @@ class Collection extends Component {
         ) : (
           <div>
             <PageTitle>
-              {this.state.label} ({items.length})
+              {this.state.label} ({items.length}/{
+                this.state.collection.pager.total
+              })
             </PageTitle>
             <Paper style={{ padding: "20px", margin: "20px" }}>
+              <Button
+                raised
+                color="primary"
+                onClick={() => this.previousPage()}
+              >
+                Previous
+              </Button>
+              <Button raised color="primary" onClick={() => this.nextPage()}>
+                Next
+              </Button>
               <Table>
                 <TableHead>
                   <TableRow>

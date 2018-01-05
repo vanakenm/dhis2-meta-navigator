@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Grid from "material-ui/Grid";
 import Api from "./lib/Api";
 import Home from "./Home";
@@ -26,7 +26,9 @@ class App extends Component {
     for (let key of sortedKeys) {
       if (
         !key.endsWith("s") &&
-        (key.startsWith("organisation") || key.startsWith("program") || key.startsWith("dataElement")) 
+        (key.startsWith("organisation") ||
+          key.startsWith("program") ||
+          key.startsWith("dataElement"))
       ) {
         let models = this.state.models;
         models.push({ name: key, label: humanize(key) });
@@ -37,28 +39,29 @@ class App extends Component {
 
   render() {
     return (
-        <div style={{ height: '100%' }}>
-          <NavigationBar />
-          <Grid container spacing={24} style={{ height: '100%' }}>
-            <Grid item xs={3}>
-              <SideBar items={this.state.models} />
-            </Grid>
-            <Grid item xs={9} style={{ height: '100%' }}>
-
-                <Route
-                  exact
-                  path={"/"}
-                  render={() => <Home items={this.state.models} />}
-                />
-                <Route path={"/collection/:modelname/:id"} component={Item} />
-                <Route
-                  exact
-                  path={"/collection/:modelname"}
-                  component={Collection}
-                />
-            </Grid>
+      <div style={{ height: "100%" }}>
+        <NavigationBar />
+        <Grid container spacing={24} style={{ height: "100%" }}>
+          <Grid item xs={3}>
+            <SideBar items={this.state.models} />
           </Grid>
-        </div>
+          <Grid item xs={9} style={{ height: "100%" }}>
+            <Switch>
+              <Route
+                exact
+                path={"/"}
+                render={() => <Home items={this.state.models} />}
+              />
+              <Route path={"/collection/:modelname/:id"} component={Item} />
+              <Route
+                exact
+                path={"/collection/:modelname"}
+                component={Collection}
+              />
+            </Switch>
+          </Grid>
+        </Grid>
+      </div>
     );
   }
 }
