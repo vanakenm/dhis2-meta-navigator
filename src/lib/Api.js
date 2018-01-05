@@ -59,6 +59,10 @@ class Api {
         return getInstance().then(d2 => d2.models[type].get(id));
     }
 
+    getMultipleMetas(type, ids) {
+        return getInstance().then(d2 => d2.Api.getApi().get(`${type}s?filter=id:in:[${ids.join(',')}]`));
+    }
+
     getAny(type) {
         return getInstance().then(d2 => d2.models[type].list());
     }

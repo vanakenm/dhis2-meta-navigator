@@ -34,6 +34,26 @@ class Item extends Component {
     await this.updateState(nextProps);
   }
 
+  async getLink(property, meta) {
+    const id = meta[property.fieldName].id;
+    const model = property.relativeApiEndpoint.slice(1,-1);
+    const link = await Api.getMeta(model, id);
+    return link;
+  }
+
+  async getLinks(property, meta) {
+    console.log(meta[property.fieldName]);
+    const ids = []
+
+    meta[property.fieldName].forEach((v) => {
+      ids.push(v.id);
+    });
+
+    const model = property.relativeApiEndpoint.slice(1,-1);
+    const links = await Api.getMultipleMetas(model, ids);
+    return links;
+  }
+
   async updateState(props) {
     let modelName = props.match.params.modelname;
     let id = props.match.params.id;
@@ -43,9 +63,17 @@ class Item extends Component {
 
     let properties = {};
 
-    schema.properties.forEach(property => {
+    let links = {};
+
+     for (let property of schema.properties) {
+      if(property.propertyType === 'REFERENCE' && property.relativeApiEndpoint && meta[property.fieldName]) {
+        links[property.fieldName] = await this.getLink(property, meta);
+      }
+      if(property.propertyType === 'COLLECTION' && property.itemPropertyType === 'REFERENCE' && property.relativeApiEndpoint && meta[property.fieldName]) {
+        links[property.fieldName] = await this.getLinks(property, meta);
+      }
       properties[property["fieldName"]] = property;
-    });
+    };
 
     this.setState({
       modelName: modelName,
@@ -53,7 +81,8 @@ class Item extends Component {
       id: id,
       meta: meta,
       schema: schema,
-      properties: properties
+      properties: properties,
+      links: links
     });
   }
 
@@ -76,6 +105,7 @@ class Item extends Component {
               value={value}
               name={key}
               property={this.state.properties[key]}
+              links={this.state.links[key]}
             />
           </TableCell>
         </TableRow>

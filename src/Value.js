@@ -28,9 +28,15 @@ class Value extends Component {
   renderReferences(property, value) {
     const model = this.model(property);
     let values = [];
-    value.forEach((v) => {
-      values.push(<span key={v.id}><Link to={`/collection/${model}/${v.id}`}>{v.id}</Link> </span>);
-    });
+    if(this.props.links) {
+      this.props.links[`${model}s`].forEach((l) => {
+        values.push(<span key={l.id}><Link to={`/collection/${model}/${l.id}`}>{l.displayName}</Link> </span>);
+      })
+    } else {
+      value.forEach((v) => {
+        values.push(<span key={v.id}><Link to={`/collection/${model}/${v.id}`}>{v.id}</Link> </span>);
+      })
+    }
     return <div>{values} ({model})</div>;
   }
 
@@ -44,7 +50,11 @@ class Value extends Component {
 
   renderReference(property, value) {
     const model = this.model(property);
-    return <span><Link to={`/collection/${model}/${value.id}`}>({value.id})</Link> ({model})</span>;
+    if(this.props.links) {
+      return <span><Link to={`/collection/${model}/${value.id}`}>{this.props.links.displayName}</Link> ({model})</span>;
+    } else {
+      return <span><Link to={`/collection/${model}/${value.id}`}>{value.id}</Link> ({model})</span>;
+    }
   }
 
   render() {
@@ -85,9 +95,6 @@ class Value extends Component {
       return <span>{translations.join(" ")}</span>      
     }
       
-    console.log("Not shown yet for " + this.props.name);
-    console.log(value);
-    console.log(property);
     return "";
   }
 }
