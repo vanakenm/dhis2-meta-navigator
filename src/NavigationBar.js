@@ -4,7 +4,6 @@ import Toolbar from 'material-ui/Toolbar';
 import AppBar from 'material-ui/AppBar';
 import Typography from 'material-ui/Typography';
 import IconButton from 'material-ui/IconButton';
-import { withStyles } from 'material-ui/styles';
 import Api from "./lib/Api";
 
 const imageStyle = {
@@ -13,11 +12,6 @@ const imageStyle = {
 
 class NavigationBar extends Component {
     render() {
-        const classes = {
-            flex: 1,
-            margin: "auto"
-        };
-
         return (
           <AppBar position="static">
             <Toolbar>

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Paper from "material-ui/Paper";
-import { Link } from "react-router-dom";
 import PageTitle from "./components/PageTitle";
 
 class Home extends Component {

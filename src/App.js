@@ -52,7 +52,7 @@ class App extends Component {
                 path={"/"}
                 render={() => <Home items={this.state.models} />}
               />
-              <Route path={"/collection/:modelname/:id"} component={Item} />
+              <Route exact path={"/collection/:modelname/:id"} component={Item} />
               <Route
                 exact
                 path={"/collection/:modelname"}

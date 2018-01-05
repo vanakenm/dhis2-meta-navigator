@@ -3,15 +3,15 @@ import Api from "./lib/Api";
 import PageTitle from "./components/PageTitle";
 import { humanize } from "./lib/Utils";
 import { CircularProgress } from "material-ui/Progress";
-import Button from "material-ui/Button";
-import Table, {
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow
-} from "material-ui/Table";
 import Paper from "material-ui/Paper";
 import { withRouter } from "react-router-dom";
+import { PagingState, CustomPaging } from "@devexpress/dx-react-grid";
+import {
+  Grid,
+  Table,
+  TableHeaderRow,
+  PagingPanel
+} from "@devexpress/dx-react-grid-material-ui";
 
 class Collection extends Component {
   constructor(props) {
@@ -42,42 +42,40 @@ class Collection extends Component {
     await this.updateState(nextProps);
   }
 
-  handleClick(id) {
+  handleClick(row) {
     const modelname = this.state.modelName;
-    this.props.history.push("/collection/" + modelname + "/" + id);
+    this.props.history.push("/collection/" + modelname + "/" + row.id);
   }
 
-  nextPage() {
+  changePage(currentPage) {
+    console.log(currentPage);
     this.state.collection.pager
-      .getNextPage()
-      .then(organisationUnitCollection => {
-        this.setState({ collection: organisationUnitCollection });
-      });
-  }
-
-  previousPage() {
-    this.state.collection.pager
-      .getPreviousPage()
+      .goToPage(currentPage + 1)
       .then(organisationUnitCollection => {
         this.setState({ collection: organisationUnitCollection });
       });
   }
 
   render() {
+    const TableRow = ({ row, ...restProps }) => (
+      <Table.Row
+        {...restProps}
+        // eslint-disable-next-line no-alert
+        onClick={() => this.handleClick(row)}
+        style={{
+          cursor: "pointer"
+        }}
+      />
+    );
     console.log(this.state.collection);
-    let items = [];
+    let rows = [];
     this.state.collection.forEach(item =>
-      items.push(
-        <TableRow key={item.id} hover onClick={() => this.handleClick(item.id)}>
-          <TableCell>{item.id}</TableCell>
-          <TableCell>{item.displayName}</TableCell>
-        </TableRow>
-      )
+      rows.push({ id: item.id, displayName: item.displayName })
     );
 
     return (
       <div>
-        {items.length === 0 ? (
+        {rows.length === 0 ? (
           <div>
             <PageTitle>{this.state.label} (loading)</PageTitle>
             <Paper style={{ padding: "20px", margin: "20px" }}>
@@ -86,31 +84,25 @@ class Collection extends Component {
           </div>
         ) : (
           <div>
-            <PageTitle>
-              {this.state.label} ({items.length}/{
-                this.state.collection.pager.total
-              })
-            </PageTitle>
+            <PageTitle>{this.state.label}</PageTitle>
             <Paper style={{ padding: "20px", margin: "20px" }}>
-              <Button
-                raised
-                color="primary"
-                onClick={() => this.previousPage()}
+              <Grid
+                rows={rows}
+                columns={[
+                  { name: "id", title: "ID" },
+                  { name: "displayName", title: "Display Name" }
+                ]}
               >
-                Previous
-              </Button>
-              <Button raised color="primary" onClick={() => this.nextPage()}>
-                Next
-              </Button>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>id</TableCell>
-                    <TableCell>name</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>{items}</TableBody>
-              </Table>
+                <PagingState
+                  currentPage={this.state.collection.pager.page - 1}
+                  onCurrentPageChange={nextPage => this.changePage(nextPage)}
+                  pageSize={50}
+                />
+                <CustomPaging totalCount={this.state.collection.pager.total} />
+                <Table rowComponent={TableRow} />
+                <TableHeaderRow />
+                <PagingPanel pageSizes={[50]} />
+              </Grid>
             </Paper>
           </div>
         )}
