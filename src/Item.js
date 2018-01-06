@@ -50,7 +50,7 @@ class Item extends Component {
     });
 
     const model = property.relativeApiEndpoint.slice(1,-1);
-    const links = await Api.getMultipleMetas(model, ids);
+    const links = await Api.getMultipleMetas(model, ids.slice(0,49));
     return links;
   }
 
