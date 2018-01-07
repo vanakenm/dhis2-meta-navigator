@@ -6,7 +6,7 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <PageTitle>Welcome to DHIS2 Analyzer</PageTitle>
+        <PageTitle>Welcome to DHIS2 Meta Navigator</PageTitle>
         <Paper style={{ padding: "20px", margin: "20px" }}>
           <p>Use the sidebar to start navigating.</p>
         </Paper>

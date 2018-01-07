@@ -28,6 +28,7 @@ class App extends Component {
         !key.endsWith("s") &&
         (key.startsWith("organisation") ||
           key.startsWith("indicator") ||
+          key.startsWith("dataSet") ||
           key.startsWith("dataElement"))
       ) {
         let models = this.state.models;

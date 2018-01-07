@@ -1,5 +1,5 @@
 {
-  "name": "dhis2-analyzer",
+  "name": "dhis2-meta-navigator",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -19,7 +19,7 @@
     "react-scripts": "1.0.17"
   },
   "homepage": ".",
-  "description": "DHIS2 application giving insight on your instance usage",
+  "description": "DHIS2 application to navigate your meta",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -27,7 +27,7 @@
     "eject": "react-scripts eject"
   },
   "manifest.webapp": {
-    "name": "DHIS2 Analyzer",
+    "name": "DHIS2 Meta Navigator",
     "icons": {
       "48": "icon.png"
     },

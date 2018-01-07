@@ -48,7 +48,6 @@ class Collection extends Component {
   }
 
   changePage(currentPage) {
-    console.log(currentPage);
     this.state.collection.pager
       .goToPage(currentPage + 1)
       .then(organisationUnitCollection => {
@@ -67,7 +66,6 @@ class Collection extends Component {
         }}
       />
     );
-    console.log(this.state.collection);
     let rows = [];
     this.state.collection.forEach(item =>
       rows.push({ id: item.id, displayName: item.displayName })

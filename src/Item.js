@@ -42,7 +42,6 @@ class Item extends Component {
   }
 
   async getLinks(property, meta) {
-    console.log(meta[property.collectionName || property.fieldName]);
     const ids = [];
 
     meta[property.collectionName || property.fieldName].forEach(v => {

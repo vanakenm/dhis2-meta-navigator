@@ -64,11 +64,6 @@ class Value extends Component {
     const value = this.props.value;
     const property = this.props.property;
 
-    console.log(this.props.name);
-    console.log(this.props.value);
-    console.log(this.props.property);
-    console.log(this.props.links);
-
     if (Array.isArray(value) && value.length === 0) {
       return "(empty)";
     }

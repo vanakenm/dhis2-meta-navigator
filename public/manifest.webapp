@@ -8,9 +8,9 @@
     }
   },
   "appType": "APP",
-  "name": "DHIS2 Analyzer",
+  "name": "DHIS2 Meta Navigator",
   "version": "0.1.0",
-  "description": "DHIS2 Analyzer",
+  "description": "DHIS2 Meta Navigator",
   "icons": {
     "48": "icon.png"
   },

@@ -24,8 +24,8 @@ class NavigationBar extends Component {
                     />
                 </Link>
                 </IconButton>
-                <Typography title="DHIS2 Analyzer App" color="inherit" style={{margin: 'auto'}}>
-                    DHIS2 Analyzer App
+                <Typography title="DHIS2 Meta Navigator App" color="inherit" style={{margin: 'auto'}}>
+                    DHIS2 Meta Navigator App
                 </Typography>
             </Toolbar>
           </AppBar>
