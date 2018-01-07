@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import Grid from "material-ui/Grid";
-import Api from "./lib/Api";
+import Api, { GROUPS } from "./lib/Api";
 import Home from "./Home";
 import NavigationBar from "./NavigationBar";
 import SideBar from "./SideBar";
@@ -20,17 +20,20 @@ class App extends Component {
     this.collectModels(metas);
   }
 
+  keyInGroups(key) {
+    for(let group of GROUPS) {
+      if(key.startsWith(group)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   async collectModels(types) {
     let sortedKeys = Object.keys(types).sort();
 
     for (let key of sortedKeys) {
-      if (
-        !key.endsWith("s") &&
-        (key.startsWith("organisation") ||
-          key.startsWith("indicator") ||
-          key.startsWith("dataSet") ||
-          key.startsWith("dataElement"))
-      ) {
+      if (!key.endsWith("s") && this.keyInGroups(key)) {
         let models = this.state.models;
         models.push({ name: key, label: humanize(key) });
         this.setState({ models: models });

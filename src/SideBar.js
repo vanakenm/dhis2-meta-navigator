@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import List, { ListItem, ListSubheader } from "material-ui/List";
 import { humanize } from "./lib/Utils";
 import { withRouter } from "react-router-dom";
-
-const GROUPS = ['organisationUnit', 'dataElement', 'indicator', 'dataSet'];
+import { GROUPS } from "./lib/Api";
 
 class SideBar extends Component {
   handleClick(modelname) {
