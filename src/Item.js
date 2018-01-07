@@ -35,22 +35,22 @@ class Item extends Component {
   }
 
   async getLink(property, meta) {
-    const id = meta[property.fieldName].id;
-    const model = property.relativeApiEndpoint.slice(1,-1);
+    const id = meta[property.collectionName || property.fieldName].id;
+    const model = property.relativeApiEndpoint.slice(1, -1);
     const link = await Api.getMeta(model, id);
     return link;
   }
 
   async getLinks(property, meta) {
-    console.log(meta[property.fieldName]);
-    const ids = []
+    console.log(meta[property.collectionName || property.fieldName]);
+    const ids = [];
 
-    meta[property.fieldName].forEach((v) => {
+    meta[property.collectionName || property.fieldName].forEach(v => {
       ids.push(v.id);
     });
 
-    const model = property.relativeApiEndpoint.slice(1,-1);
-    const links = await Api.getMultipleMetas(model, ids.slice(0,49));
+    const model = property.relativeApiEndpoint.slice(1, -1);
+    const links = await Api.getMultipleMetas(model, ids.slice(0, 49));
     return links;
   }
 
@@ -65,15 +65,24 @@ class Item extends Component {
 
     let links = {};
 
-     for (let property of schema.properties) {
-      if(property.propertyType === 'REFERENCE' && property.relativeApiEndpoint && meta[property.fieldName]) {
-        links[property.fieldName] = await this.getLink(property, meta);
+    for (let property of schema.properties) {
+      if (
+        property.propertyType === "REFERENCE" &&
+        property.relativeApiEndpoint &&
+        (meta[property.fieldName] || meta[property.collectionName])
+      ) {
+        links[property.collectionName || property.fieldName] = await this.getLink(property, meta);
       }
-      if(property.propertyType === 'COLLECTION' && property.itemPropertyType === 'REFERENCE' && property.relativeApiEndpoint && meta[property.fieldName]) {
-        links[property.fieldName] = await this.getLinks(property, meta);
+      if (
+        property.propertyType === "COLLECTION" &&
+        property.itemPropertyType === "REFERENCE" &&
+        property.relativeApiEndpoint &&
+        (meta[property.fieldName] || meta[property.collectionName])
+      ) {
+        links[property.collectionName || property.fieldName] = await this.getLinks(property, meta);
       }
-      properties[property["fieldName"]] = property;
-    };
+      properties[property.collectionName || property.fieldName] = property;
+    }
 
     this.setState({
       modelName: modelName,
@@ -89,11 +98,6 @@ class Item extends Component {
   render() {
     let sortedKeys = Object.keys(this.state.meta).sort();
     let items = [];
-
-    console.log(this.state.meta.level);
-    if (this.state.properties) {
-      console.log(this.state.properties);
-    }
 
     sortedKeys.forEach(key => {
       let value = this.state.meta[key];
@@ -126,7 +130,9 @@ class Item extends Component {
         ) : (
           <div>
             <PageTitle>
-              {this.state.label} > {this.state.meta.displayName} ({this.state.id})
+              {this.state.label} > {this.state.meta.displayName} ({
+                this.state.id
+              })
             </PageTitle>
             <Paper style={{ padding: "20px", margin: "20px" }}>
               <Table>

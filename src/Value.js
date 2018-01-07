@@ -31,7 +31,10 @@ class Value extends Component {
     if(this.props.links) {
       this.props.links[`${model}s`].forEach((l) => {
         values.push(<span key={l.id}><Link to={`/collection/${model}/${l.id}`}>{l.displayName}</Link> </span>);
-      })
+      });
+      if(value.length > this.props.links.length) {
+        values.push(<span key="more">... ({value.length - this.props.links.length} more)</span>);
+      }
     } else {
       value.forEach((v) => {
         values.push(<span key={v.id}><Link to={`/collection/${model}/${v.id}`}>{v.id}</Link> </span>);
@@ -60,6 +63,11 @@ class Value extends Component {
   render() {
     const value = this.props.value;
     const property = this.props.property;
+
+    console.log(this.props.name);
+    console.log(this.props.value);
+    console.log(this.props.property);
+    console.log(this.props.links);
 
     if (Array.isArray(value) && value.length === 0) {
       return "(empty)";
