@@ -1,6 +1,6 @@
 import { init, getInstance, getManifest } from "d2/lib/d2";
 
-const API_URL = "https://play.dhis2.org/demo";
+const API_URL = "https://play.dhis2.org/2.28";
 const GROUPS = ['organisationUnit', 'dataElement', 'indicator', 'dataSet'];
 
 class Api {

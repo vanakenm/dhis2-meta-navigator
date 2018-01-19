@@ -95,6 +95,7 @@ class Item extends Component {
   }
 
   render() {
+    console.log("Rendering item for " + this.props.match.params.id);
     let sortedKeys = Object.keys(this.state.meta).sort();
     let items = [];
 

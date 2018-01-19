@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Api from "./lib/Api";
+import SearchBox from "./components/SearchBox";
 import PageTitle from "./components/PageTitle";
 import { humanize } from "./lib/Utils";
 import { CircularProgress } from "material-ui/Progress";
@@ -83,6 +84,7 @@ class Collection extends Component {
         ) : (
           <div>
             <PageTitle>{this.state.label}</PageTitle>
+            <SearchBox />
             <Paper style={{ padding: "20px", margin: "20px" }}>
               <Grid
                 rows={rows}
