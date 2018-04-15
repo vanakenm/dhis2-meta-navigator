@@ -10,7 +10,10 @@ import {
   Grid,
   Table,
   TableHeaderRow,
-  PagingPanel
+  PagingPanel,
+  ColumnChooser,
+  TableColumnVisibility,
+  Toolbar
 } from "@devexpress/dx-react-grid-material-ui";
 
 class Collection extends Component {
@@ -20,17 +23,48 @@ class Collection extends Component {
     this.state = {
       modelName: modelName,
       label: humanize(modelName),
-      collection: []
+      collection: [],
+      hiddenColumnNames: []
     };
   }
 
   async updateState(props) {
     let modelName = props.match.params.modelname;
     let collection = await Api.getAny(modelName);
+    let schema = await Api.getSchema(modelName);
+
+    let rows = [];
+    collection.forEach(item => rows.push(item));
+
+    let fieldNames = schema.properties
+      .filter(prop => {
+        return (
+          prop.simple && (prop.fieldName !== undefined && prop.fieldName !== "")
+        );
+      })
+      .map(prop => {
+        return prop.fieldName;
+      });
+
+    fieldNames.unshift("id");
+
+    let columns = fieldNames.map(field => {
+      return { name: field, title: field };
+    });
+
+    let hiddenColumnNames = fieldNames.filter(
+      f => !["id", "displayName"].includes(f)
+    );
+
     this.setState({
-      modelName: modelName,
+      modelName,
       label: humanize(modelName),
-      collection: collection
+      collection,
+      schema,
+      rows,
+      columns,
+      fieldNames,
+      hiddenColumnNames
     });
   }
 
@@ -48,11 +82,11 @@ class Collection extends Component {
   }
 
   changePage(currentPage) {
-    this.state.collection.pager
-      .goToPage(currentPage + 1)
-      .then(organisationUnitCollection => {
-        this.setState({ collection: organisationUnitCollection });
-      });
+    this.state.collection.pager.goToPage(currentPage + 1).then(collection => {
+      let rows = [];
+      collection.forEach(item => rows.push(item));
+      this.setState({ collection, rows });
+    });
   }
 
   render() {
@@ -66,44 +100,43 @@ class Collection extends Component {
         }}
       />
     );
-    let rows = [];
-    this.state.collection.forEach(item =>
-      rows.push({ id: item.id, displayName: item.displayName })
-    );
 
-    return (
-      <div>
-        {rows.length === 0 ? (
+    if (this.state.rows === undefined) {
+      return (
+        <div>
           <div>
-            <PageTitle>{this.state.label} (loading)</PageTitle>
+            <PageTitle>{this.state.label}s</PageTitle>
             <Paper style={{ padding: "20px", margin: "20px" }}>
               <CircularProgress size={80} thickness={5} />
             </Paper>
           </div>
-        ) : (
-          <div>
-            <PageTitle>{this.state.label}</PageTitle>
-            <Paper style={{ padding: "20px", margin: "20px" }}>
-              <Grid
-                rows={rows}
-                columns={[
-                  { name: "id", title: "ID" },
-                  { name: "displayName", title: "Display Name" }
-                ]}
-              >
-                <PagingState
-                  currentPage={this.state.collection.pager.page - 1}
-                  onCurrentPageChange={nextPage => this.changePage(nextPage)}
-                  pageSize={50}
-                />
-                <CustomPaging totalCount={this.state.collection.pager.total} />
-                <Table rowComponent={TableRow} />
-                <TableHeaderRow />
-                <PagingPanel pageSizes={[50]} />
-              </Grid>
-            </Paper>
-          </div>
-        )}
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        <div>
+          <PageTitle>{this.state.label}s</PageTitle>
+          <Paper style={{ padding: "20px", margin: "20px" }}>
+            <Grid rows={this.state.rows} columns={this.state.columns}>
+              <PagingState
+                currentPage={this.state.collection.pager.page - 1}
+                onCurrentPageChange={nextPage => this.changePage(nextPage)}
+                pageSize={50}
+              />
+              <CustomPaging totalCount={this.state.collection.pager.total} />
+              <Table rowComponent={TableRow} />
+              <TableHeaderRow />
+              <TableColumnVisibility
+                defaultHiddenColumnNames={this.state.hiddenColumnNames}
+              />
+              <Toolbar />
+              <ColumnChooser />
+              <PagingPanel pageSizes={[50]} />
+            </Grid>
+          </Paper>
+        </div>
       </div>
     );
   }
