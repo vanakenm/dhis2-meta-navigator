@@ -66,8 +66,10 @@ class Api {
     );
   }
 
-  getAny(type) {
-    return getInstance().then(d2 => d2.models[type].list({ fields: ":all" }));
+  getAny(type, paging = true) {
+    return getInstance().then(d2 =>
+      d2.models[type].list({ fields: ":all", paging })
+    );
   }
 
   /**

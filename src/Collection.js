@@ -6,6 +6,14 @@ import { CircularProgress } from "material-ui/Progress";
 import Paper from "material-ui/Paper";
 import { withRouter } from "react-router-dom";
 import { PagingState, CustomPaging } from "@devexpress/dx-react-grid";
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from "material-ui/Dialog";
+import { CSVLink } from "react-csv";
+import Button from "material-ui/Button";
 import {
   Grid,
   Table,
@@ -24,7 +32,9 @@ class Collection extends Component {
       modelName: modelName,
       label: humanize(modelName),
       collection: [],
-      hiddenColumnNames: []
+      hiddenColumnNames: [],
+      openDialog: false,
+      allRows: []
     };
   }
 
@@ -68,6 +78,13 @@ class Collection extends Component {
     });
   }
 
+  loadAllRows = async () => {
+    let collection = await Api.getAny(this.state.modelName, false);
+    let allRows = [];
+    collection.forEach(item => allRows.push(item));
+    this.setState({ allRows });
+  };
+
   async componentWillMount() {
     await this.updateState(this.props);
   }
@@ -88,6 +105,15 @@ class Collection extends Component {
       this.setState({ collection, rows });
     });
   }
+
+  openDialog = () => {
+    this.loadAllRows();
+    this.setState({ openDialog: true });
+  };
+
+  closeDialog = () => {
+    this.setState({ openDialog: false });
+  };
 
   render() {
     const TableRow = ({ row, ...restProps }) => (
@@ -135,6 +161,39 @@ class Collection extends Component {
               <ColumnChooser />
               <PagingPanel pageSizes={[50]} />
             </Grid>
+            <Button color="primary" variant="raised" onClick={this.openDialog}>
+              Download
+            </Button>
+
+            <Dialog
+              aria-labelledby="simple-dialog-title"
+              open={this.state.openDialog}
+            >
+              <DialogTitle id="simple-dialog-title">Download</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  {this.state.allRows.length === 0 ? (
+                    <p>Fetching data...</p>
+                  ) : (
+                    <CSVLink
+                      data={this.state.allRows}
+                      headers={this.state.columns.map(c => c.name)}
+                      filename={`${this.state.modelName}s.csv`}
+                      target="_blank"
+                    >
+                      <Button color="primary" variant="raised">
+                        Download as Excel
+                      </Button>
+                    </CSVLink>
+                  )}
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.closeDialog} color="primary" autoFocus>
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
           </Paper>
         </div>
       </div>
