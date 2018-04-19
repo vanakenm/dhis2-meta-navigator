@@ -66,10 +66,35 @@ class Api {
     );
   }
 
-  getAny(type, paging = true) {
+  getFilteredAny(type, filter) {
     return getInstance().then(d2 =>
-      d2.models[type].list({ fields: ":all", paging })
+      d2.models[type].list({
+        fields: ":all",
+        filter: `${filter.field}:${filter.operator}:${filter.value}`
+      })
     );
+  }
+
+  getAny(type, params = { paging: true, filter: null }) {
+    if (
+      params.filter !== undefined &&
+      params.filter !== null &&
+      params.filter.field !== undefined
+    )
+      return getInstance().then(d2 =>
+        d2.models[type].list({
+          fields: ":all",
+          paging: params.paging,
+          filter: `${params.filter.field}:${params.filter.operator}:${
+            params.filter.value
+          }`
+        })
+      );
+    else {
+      return getInstance().then(d2 =>
+        d2.models[type].list({ fields: ":all", paging: params.paging })
+      );
+    }
   }
 
   /**
