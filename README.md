@@ -6,7 +6,7 @@ This is a simple DHIS2 Application allowing for easier presentation & navigation
 
 A gif is better than a log explanation, so here is it:
 
-![](https://raw.githubusercontent.com/vanakenm/dhis2-analyzer/master/public/demo.gif)
+![](https://i.imgur.com/EmRZKHV.gif)
 
 It uses React and D2, the dhis2 javascript library to load some data, and was created both to fulfill me needs & allow me to explore those librairies.
 
@@ -22,8 +22,8 @@ This should show a very basic page then load data elements from the demo instanc
 
 ## Deploy
 
-- yarn build
-- zip the content of the build folder & upload to DHIS2
+* yarn build
+* zip the content of the build folder & upload to DHIS2
 
 # Create React App
 
