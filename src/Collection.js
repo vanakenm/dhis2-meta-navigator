@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Api from "./lib/Api";
 import PageTitle from "./components/PageTitle";
+import FilterPanel from "./components/FilterPanel";
 import { humanize } from "./lib/Utils";
 import { CircularProgress } from "material-ui/Progress";
 import Paper from "material-ui/Paper";
@@ -74,12 +75,16 @@ class Collection extends Component {
       rows,
       columns,
       fieldNames,
-      hiddenColumnNames
+      hiddenColumnNames,
+      filter: null
     });
   }
 
   loadAllRows = async () => {
-    let collection = await Api.getAny(this.state.modelName, false);
+    let collection = await Api.getAny(this.state.modelName, {
+      paging: false,
+      filter: this.state.filter
+    });
     let allRows = [];
     collection.forEach(item => allRows.push(item));
     this.setState({ allRows });
@@ -115,6 +120,21 @@ class Collection extends Component {
     this.setState({ openDialog: false });
   };
 
+  applyFilter = async (field, operator, value) => {
+    this.setState({ filter: { field, operator, value } });
+    let collection = await Api.getAny(this.state.modelName, {
+      filter: {
+        field,
+        operator,
+        value
+      },
+      paging: true
+    });
+    let rows = [];
+    collection.forEach(item => rows.push(item));
+    this.setState({ rows, collection });
+  };
+
   render() {
     const TableRow = ({ row, ...restProps }) => (
       <Table.Row
@@ -145,6 +165,10 @@ class Collection extends Component {
         <div>
           <PageTitle>{this.state.label}s</PageTitle>
           <Paper style={{ padding: "20px", margin: "20px" }}>
+            <FilterPanel
+              fields={this.state.fieldNames}
+              applyFilter={this.applyFilter}
+            />
             <Grid rows={this.state.rows} columns={this.state.columns}>
               <PagingState
                 currentPage={this.state.collection.pager.page - 1}
