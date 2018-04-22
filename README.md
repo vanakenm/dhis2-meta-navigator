@@ -6,7 +6,7 @@ This is a simple DHIS2 Application allowing for easier presentation & navigation
 
 A gif is better than a log explanation, so here is it:
 
-![](https://raw.githubusercontent.com/vanakenm/dhis2-analyzer/master/public/demo.gif)
+![](https://raw.githubusercontent.com/vanakenm/dhis2-meta-navigator/master/demo.gif)
 
 It uses React and D2, the dhis2 javascript library to load some data, and was created both to fulfill me needs & allow me to explore those librairies.
 

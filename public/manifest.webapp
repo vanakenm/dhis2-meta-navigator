@@ -4,7 +4,7 @@
   "activities": {
     "dhis": {
       "href": "*",
-      "namespace": "blsq-dhis2-meta-navigator"
+      "namespace": "mva-meta-navigator"
     }
   },
   "appType": "APP",
