@@ -2,13 +2,30 @@
 
 ## About
 
-This is a simple DHIS2 Application allowing for easier presentation & navigation (read only) of all "meta" objects in DHIS2 (Org Unit, Data Element, etc).
+This is a simple DHIS2 Application allowing for easier presentation, search & navigation (read only) of "meta" objects in DHIS2:
+
+* Org Units
+* Org Unit Levels
+* Org Unit Groups
+* Org Unit Group Sets
+* Data Elements
+* Data Element Groups
+* Data Element Group Sets
+* Data Sets
+* Categories
+* Category Combos
+* Category Option Combos
+* Category Option Groups
+* Category Option Group Sets
+* Attributes
 
 A gif is better than a log explanation, so here is it:
 
 ![](https://raw.githubusercontent.com/vanakenm/dhis2-meta-navigator/master/demo.gif)
 
-It uses React and D2, the dhis2 javascript library to load some data, and was created both to fulfill me needs & allow me to explore those librairies.
+It uses React and D2, the dhis2 javascript library to load some data, and was created both to fulfill my needs & allow me to explore those librairies.
+
+Tested on DHIS2 2.28, working on 2.26, other versions still to test (but I expect 2.27 & 2.29 to work)
 
 ## Development
 
@@ -16,6 +33,7 @@ To use the DHIS2 Play instance, you need to make sure it accepts calls from http
 
 Then:
 
+    yarn install
     yarn start
 
 This should show a very basic page then load data elements from the demo instance.
