@@ -1,20 +1,20 @@
-import React, { Component } from "react";
-import Api from "./lib/Api";
-import PageTitle from "./components/PageTitle";
-import FilterPanel from "./components/FilterPanel";
-import { humanize } from "./lib/Utils";
-import { CircularProgress } from "material-ui/Progress";
-import Paper from "material-ui/Paper";
-import { withRouter } from "react-router-dom";
-import { PagingState, CustomPaging } from "@devexpress/dx-react-grid";
+import React, { Component } from 'react';
+import Api from './lib/Api';
+import PageTitle from './components/PageTitle';
+import FilterPanel from './components/FilterPanel';
+import { humanize } from './lib/Utils';
+import { CircularProgress } from 'material-ui/Progress';
+import Paper from 'material-ui/Paper';
+import { withRouter } from 'react-router-dom';
+import { PagingState, CustomPaging } from '@devexpress/dx-react-grid';
 import Dialog, {
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle
-} from "material-ui/Dialog";
-import { CSVLink } from "react-csv";
-import Button from "material-ui/Button";
+} from 'material-ui/Dialog';
+import { CSVLink } from 'react-csv';
+import Button from 'material-ui/Button';
 import {
   Grid,
   Table,
@@ -23,7 +23,7 @@ import {
   ColumnChooser,
   TableColumnVisibility,
   Toolbar
-} from "@devexpress/dx-react-grid-material-ui";
+} from '@devexpress/dx-react-grid-material-ui';
 
 class Collection extends Component {
   constructor(props) {
@@ -50,21 +50,21 @@ class Collection extends Component {
     let fieldNames = schema.properties
       .filter(prop => {
         return (
-          prop.simple && (prop.fieldName !== undefined && prop.fieldName !== "")
+          prop.simple && (prop.fieldName !== undefined && prop.fieldName !== '')
         );
       })
       .map(prop => {
         return prop.fieldName;
       });
 
-    fieldNames.unshift("id");
+    fieldNames.unshift('id');
 
     let columns = fieldNames.map(field => {
       return { name: field, title: field };
     });
 
     let hiddenColumnNames = fieldNames.filter(
-      f => !["id", "displayName"].includes(f)
+      f => !['id', 'displayName'].includes(f)
     );
 
     this.setState({
@@ -100,7 +100,7 @@ class Collection extends Component {
 
   handleClick(row) {
     const modelname = this.state.modelName;
-    this.props.history.push("/collection/" + modelname + "/" + row.id);
+    this.props.history.push('/collection/' + modelname + '/' + row.id);
   }
 
   changePage(currentPage) {
@@ -118,6 +118,14 @@ class Collection extends Component {
 
   closeDialog = () => {
     this.setState({ openDialog: false });
+  };
+
+  cancelFilter = async () => {
+    await this.setState({});
+    let collection = await Api.getAny(this.state.modelName);
+    let rows = [];
+    collection.forEach(item => rows.push(item));
+    this.setState({ rows, collection, filter: null });
   };
 
   applyFilter = async (field, operator, value) => {
@@ -142,7 +150,7 @@ class Collection extends Component {
         // eslint-disable-next-line no-alert
         onClick={() => this.handleClick(row)}
         style={{
-          cursor: "pointer"
+          cursor: 'pointer'
         }}
       />
     );
@@ -152,7 +160,7 @@ class Collection extends Component {
         <div>
           <div>
             <PageTitle>{this.state.label}s</PageTitle>
-            <Paper style={{ padding: "20px", margin: "20px" }}>
+            <Paper style={{ padding: '20px', margin: '20px' }}>
               <CircularProgress size={80} thickness={5} />
             </Paper>
           </div>
@@ -164,10 +172,11 @@ class Collection extends Component {
       <div>
         <div>
           <PageTitle>{this.state.label}s</PageTitle>
-          <Paper style={{ padding: "20px", margin: "20px" }}>
+          <Paper style={{ padding: '20px', margin: '20px' }}>
             <FilterPanel
               fields={this.state.fieldNames}
               applyFilter={this.applyFilter}
+              cancelFilter={this.cancelFilter}
             />
             <Grid rows={this.state.rows} columns={this.state.columns}>
               <PagingState
