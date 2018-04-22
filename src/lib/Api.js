@@ -1,7 +1,59 @@
-import { init, getInstance, getManifest } from "d2/lib/d2";
+import { init, getInstance, getManifest } from 'd2/lib/d2';
+import _ from 'lodash';
 
-const API_URL = "https://play.dhis2.org/2.28/";
-const GROUPS = ["organisationUnit", "dataElement", "indicator", "dataSet"];
+const API_URL = 'https://play.dhis2.org/2.28/';
+
+const SECTIONS = {
+  categorySection: [
+    'categoryOption',
+    'category',
+    'categoryCombo',
+    'categoryOptionCombo',
+    'categoryOptionGroup',
+    'categoryOptionGroupSet'
+  ],
+  dataElementSection: [
+    'dataElement',
+    'dataElementGroup',
+    'dataElementGroupSet'
+  ],
+  dataSetSection: ['dataSet'],
+  organisationUnitSection: [
+    'organisationUnit',
+    'organisationUnitGroup',
+    'organisationUnitGroupSet',
+    'organisationUnitLevel'
+  ],
+  indicatorSection: [
+    'indicator',
+    'indicatorGroup',
+    'indicatorType',
+    'indicatorGroupSet'
+  ],
+  otherSection: ['attribute']
+};
+
+const ITEMS_PER_SECTION = {
+  categoryOption: 'categorySection',
+  category: 'categorySection',
+  categoryCombo: 'categorySection',
+  categoryOptionCombo: 'categorySection',
+  categoryOptionGroup: 'categorySection',
+  categoryOptionGroupSet: 'categorySection',
+  dataElement: 'dataElement',
+  dataElementGroup: 'dataElement',
+  dataElementGroupSet: 'dataElement',
+  dataSet: 'dataSetSection',
+  organisationUnit: 'organisationUnitSection',
+  organisationUnitGroup: 'organisationUnitSection',
+  organisationUnitGroupSet: 'organisationUnitSection',
+  organisationUnitLevel: 'organisationUnitSection',
+  indicator: 'indicatorSection',
+  indicatorGroup: 'indicatorSection',
+  indicatorType: 'indicatorSection',
+  indicatorGroupSet: 'indicatorSection',
+  attribute: 'otherSection'
+};
 
 class Api {
   /**
@@ -11,9 +63,9 @@ class Api {
   constructor(url) {
     this.url = url;
     this.cache = [];
-    this.userId = "";
-    this.baseUrl = "..";
-    this.ignoredStores = [""];
+    this.userId = '';
+    this.baseUrl = '..';
+    this.ignoredStores = [''];
   }
 
   /**
@@ -22,29 +74,30 @@ class Api {
    */
   initialize() {
     let headers =
-      process.env.NODE_ENV === "development"
-        ? { Authorization: "Basic YWRtaW46ZGlzdHJpY3Q=" }
+      process.env.NODE_ENV === 'development'
+        ? { Authorization: 'Basic YWRtaW46ZGlzdHJpY3Q=' }
         : null;
-    this.d2 = getManifest("./manifest.webapp")
+    this.d2 = getManifest('./manifest.webapp')
       .then(manifest => {
         const baseUrl =
-          process.env.NODE_ENV === "production"
+          process.env.NODE_ENV === 'production'
             ? manifest.getBaseUrl()
             : this.url;
-        console.info("Using URL: " + baseUrl);
+        console.info('Using URL: ' + baseUrl);
         console.info(`Loading: ${manifest.name} v${manifest.version}`);
         console.info(`Built ${manifest.manifest_generated_at}`);
         this.baseUrl = baseUrl;
-        return baseUrl + "/api";
+        return baseUrl + '/api';
       })
       .catch(e => {
         return this.url;
       })
-      .then(baseUrl =>
+      .then(baseUrl => {
         init({ baseUrl, headers }).then(
           d2 => (this.userId = d2.currentUser.username)
-        )
-      );
+        );
+      });
+    this.getSchema = _.memoize(this.getSchema);
     return this;
   }
 
@@ -52,26 +105,17 @@ class Api {
     return getInstance().then(d2 => d2.Api.getApi().get(`schemas/${model}`));
   }
 
-  getMetas() {
-    return getInstance().then(d2 => d2.models);
-  }
-
   getMeta(type, id) {
     return getInstance().then(d2 => d2.models[type].get(id));
   }
 
-  getMultipleMetas(type, ids) {
-    return getInstance().then(d2 =>
-      d2.Api.getApi().get(`${type}s?filter=id:in:[${ids.join(",")}]`)
-    );
+  getUrl() {
+    return this.baseUrl;
   }
 
-  getFilteredAny(type, filter) {
+  getMultipleMetas(type, ids) {
     return getInstance().then(d2 =>
-      d2.models[type].list({
-        fields: ":all",
-        filter: `${filter.field}:${filter.operator}:${filter.value}`
-      })
+      d2.Api.getApi().get(`${type}s?filter=id:in:[${ids.join(',')}]`)
     );
   }
 
@@ -83,7 +127,7 @@ class Api {
     )
       return getInstance().then(d2 =>
         d2.models[type].list({
-          fields: ":all",
+          fields: ':all',
           paging: params.paging,
           filter: `${params.filter.field}:${params.filter.operator}:${
             params.filter.value
@@ -92,7 +136,7 @@ class Api {
       );
     else {
       return getInstance().then(d2 =>
-        d2.models[type].list({ fields: ":all", paging: params.paging })
+        d2.models[type].list({ fields: ':all', paging: params.paging })
       );
     }
   }
@@ -109,5 +153,5 @@ class Api {
   }
 }
 
-export { GROUPS };
+export { SECTIONS, ITEMS_PER_SECTION };
 export default (() => new Api(API_URL).initialize())();

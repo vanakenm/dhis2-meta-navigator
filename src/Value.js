@@ -1,24 +1,29 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import { timeAgo } from "./lib/Utils";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { timeAgo } from './lib/Utils';
 
 import ClearIcon from 'material-ui-icons/Clear';
 import DoneIcon from 'material-ui-icons/Done';
 import BlockIcon from 'material-ui-icons/Block';
+import { ITEMS_PER_SECTION } from './lib/Api';
 
 class Value extends Component {
   model(property) {
-    return property.relativeApiEndpoint.slice(1,-1);
+    return property.relativeApiEndpoint.slice(1, -1);
   }
 
   renderBoolean(boolvalue) {
     return boolvalue ? <DoneIcon /> : <ClearIcon />;
-  } 
+  }
 
   renderSimple(property, value) {
-    if (property !== null && property !== undefined && property.propertyType === 'DATE') {
+    if (
+      property !== null &&
+      property !== undefined &&
+      property.propertyType === 'DATE'
+    ) {
       return `${value} (${timeAgo(new Date(value))})`;
-    } else if (typeof value === "boolean") {
+    } else if (typeof value === 'boolean') {
       return this.renderBoolean(value);
     } else {
       return value.toString();
@@ -27,36 +32,74 @@ class Value extends Component {
 
   renderReferences(property, value) {
     const model = this.model(property);
+    const section = ITEMS_PER_SECTION[model];
     let values = [];
-    if(this.props.links) {
-      this.props.links[`${model}s`].forEach((l) => {
-        values.push(<span key={l.id}><Link to={`/collection/${model}/${l.id}`}>{l.displayName}</Link> </span>);
+    if (this.props.links) {
+      this.props.links[`${model}s`].forEach(l => {
+        values.push(
+          <span key={l.id}>
+            <Link to={`/collection/${section}/${model}/${l.id}`}>
+              {l.displayName}
+            </Link>{' '}
+          </span>
+        );
       });
-      if(value.length > this.props.links.length) {
-        values.push(<span key="more">... ({value.length - this.props.links.length} more)</span>);
+      if (value.length > this.props.links.length) {
+        values.push(
+          <span key="more">
+            ... ({value.length - this.props.links.length} more)
+          </span>
+        );
       }
     } else {
-      value.forEach((v) => {
-        values.push(<span key={v.id}><Link to={`/collection/${model}/${v.id}`}>{v.id}</Link> </span>);
-      })
+      value.forEach(v => {
+        values.push(
+          <span key={v.id}>
+            <Link to={`/collection/${section}/${model}/${v.id}`}>{v.id}</Link>{' '}
+          </span>
+        );
+      });
     }
-    return <div>{values} ({model})</div>;
+    return (
+      <div>
+        {values} ({model})
+      </div>
+    );
   }
 
   renderAccess(property, value) {
     let access = [];
     Object.entries(value).forEach(([key, value]) => {
-      access.push(<span key={key}>{key} {this.renderBoolean(value)}</span>);
+      access.push(
+        <span key={key}>
+          {key} {this.renderBoolean(value)}
+        </span>
+      );
     });
     return <span>{access}</span>;
   }
 
   renderReference(property, value) {
     const model = this.model(property);
-    if(this.props.links) {
-      return <span><Link to={`/collection/${model}/${value.id}`}>{this.props.links.displayName}</Link> ({model})</span>;
+    const section = ITEMS_PER_SECTION[model];
+    if (this.props.links) {
+      return (
+        <span>
+          <Link to={`/collection/${section}/${model}/${value.id}`}>
+            {this.props.links.displayName}
+          </Link>{' '}
+          ({model})
+        </span>
+      );
     } else {
-      return <span><Link to={`/collection/${model}/${value.id}`}>{value.id}</Link> ({model})</span>;
+      return (
+        <span>
+          <Link to={`/collection/${section}/${model}/${value.id}`}>
+            {value.id}
+          </Link>{' '}
+          ({model})
+        </span>
+      );
     }
   }
 
@@ -65,13 +108,12 @@ class Value extends Component {
     const property = this.props.property;
 
     if (Array.isArray(value) && value.length === 0) {
-      return "(empty)";
+      return '(empty)';
     }
 
     if (this.props.name === 'id' || this.props.name === 'level') {
       return this.renderSimple(property, value);
     }
-
 
     if (value == null || property == null) {
       return <BlockIcon />;
@@ -79,26 +121,31 @@ class Value extends Component {
 
     if (property.simple === true && property.propertyType !== 'ĈOLLECTION') {
       return this.renderSimple(property, value);
-    } 
+    }
 
-    if(property.propertyType === 'REFERENCE') {
+    if (property.propertyType === 'REFERENCE') {
       return this.renderReference(property, value);
-    } 
-    
-    if(property.propertyType === 'COLLECTION' && property.itemPropertyType === 'REFERENCE') {
+    }
+
+    if (
+      property.propertyType === 'COLLECTION' &&
+      property.itemPropertyType === 'REFERENCE'
+    ) {
       return this.renderReferences(property, value);
     }
 
-    if(this.props.name === 'access') {
+    if (this.props.name === 'access') {
       return this.renderAccess(property, value);
     }
 
-    if(this.props.name === 'translations') {
-      let translations = value.map((t) => { return `'${t.value} (${t.locale})'` });
-      return <span>{translations.join(" ")}</span>      
+    if (this.props.name === 'translations') {
+      let translations = value.map(t => {
+        return `'${t.value} (${t.locale})'`;
+      });
+      return <span>{translations.join(' ')}</span>;
     }
-      
-    return "";
+
+    return '';
   }
 }
 

@@ -41,6 +41,7 @@ class Collection extends Component {
 
   async updateState(props) {
     let modelName = props.match.params.modelname;
+    let sectionName = props.match.params.sectionname;
     let collection = await Api.getAny(modelName);
     let schema = await Api.getSchema(modelName);
 
@@ -69,6 +70,7 @@ class Collection extends Component {
 
     this.setState({
       modelName,
+      sectionName,
       label: humanize(modelName),
       collection,
       schema,
@@ -100,7 +102,10 @@ class Collection extends Component {
 
   handleClick(row) {
     const modelname = this.state.modelName;
-    this.props.history.push('/collection/' + modelname + '/' + row.id);
+    const sectionname = this.state.sectionName;
+    this.props.history.push(
+      `/collection/${sectionname}/${modelname}/${row.id}`
+    );
   }
 
   changePage(currentPage) {

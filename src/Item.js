@@ -1,26 +1,28 @@
-import React, { Component } from "react";
-import Api from "./lib/Api";
-import Value from "./Value";
-import { humanize } from "./lib/Utils";
-import PageTitle from "./components/PageTitle";
-import { CircularProgress } from "material-ui/Progress";
-import Paper from "material-ui/Paper";
+import React, { Component } from 'react';
+import Api from './lib/Api';
+import Value from './Value';
+import { humanize } from './lib/Utils';
+import PageTitle from './components/PageTitle';
+import { CircularProgress } from 'material-ui/Progress';
+import Paper from 'material-ui/Paper';
 import Table, {
   TableBody,
   TableCell,
   TableHead,
   TableRow
-} from "material-ui/Table";
+} from 'material-ui/Table';
 
 class Item extends Component {
   constructor(props) {
     super(props);
     let modelName = props.match.params.modelname;
+    let sectionName = props.match.params.sectionname;
     let id = props.match.params.id;
 
     this.state = {
-      modelName: modelName,
-      id: id,
+      modelName,
+      sectionName,
+      id,
       label: humanize(modelName),
       meta: {}
     };
@@ -66,19 +68,23 @@ class Item extends Component {
 
     for (let property of schema.properties) {
       if (
-        property.propertyType === "REFERENCE" &&
+        property.propertyType === 'REFERENCE' &&
         property.relativeApiEndpoint &&
         (meta[property.fieldName] || meta[property.collectionName])
       ) {
-        links[property.collectionName || property.fieldName] = await this.getLink(property, meta);
+        links[
+          property.collectionName || property.fieldName
+        ] = await this.getLink(property, meta);
       }
       if (
-        property.propertyType === "COLLECTION" &&
-        property.itemPropertyType === "REFERENCE" &&
+        property.propertyType === 'COLLECTION' &&
+        property.itemPropertyType === 'REFERENCE' &&
         property.relativeApiEndpoint &&
         (meta[property.fieldName] || meta[property.collectionName])
       ) {
-        links[property.collectionName || property.fieldName] = await this.getLinks(property, meta);
+        links[
+          property.collectionName || property.fieldName
+        ] = await this.getLinks(property, meta);
       }
       properties[property.collectionName || property.fieldName] = property;
     }
@@ -115,6 +121,9 @@ class Item extends Component {
       );
     });
 
+    let editUrl = `${Api.getUrl()}/dhis-web-maintenance/#/edit/${
+      this.state.sectionName
+    }/${this.state.modelName}/${this.state.id}`;
     return (
       <div>
         {items.length === 0 ? (
@@ -122,7 +131,7 @@ class Item extends Component {
             <PageTitle>
               {this.state.label} > ({this.state.id})
             </PageTitle>
-            <Paper style={{ padding: "20px", margin: "20px" }}>
+            <Paper style={{ padding: '20px', margin: '20px' }}>
               <CircularProgress size={80} thickness={5} />
             </Paper>
           </div>
@@ -133,7 +142,10 @@ class Item extends Component {
                 this.state.id
               })
             </PageTitle>
-            <Paper style={{ padding: "20px", margin: "20px" }}>
+            <a href={editUrl} target="_blank">
+              Edit in DHIS2
+            </a>
+            <Paper style={{ padding: '20px', margin: '20px' }}>
               <Table>
                 <TableHead>
                   <TableRow>
